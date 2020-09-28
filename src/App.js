@@ -8,12 +8,16 @@ import {
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import InfoBox from "./InfoBox";
+import LineGraph from "./LineGraph";
 import Map from "./Map";
+import Table from "./Table";
+import { sortData } from "./util";
 
 function App() {
   const [countries, setCountries] = useState([]); // React hooks
   const [country, setCountry] = useState("worldwide");
   const [counryInfo, setCounryInfo] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     // api endpoint :"https://disease.sh/v3/covid-19/countries"
@@ -26,6 +30,8 @@ function App() {
             name: country.country, //unidede kin, turkey
             value: country.countryInfo.iso2, //uk,tr
           }));
+          const sortedData = sortData(data)
+          setTableData(sortedData)
           setCountries(countries);
         });
     };
@@ -55,7 +61,7 @@ function App() {
         setCounryInfo(data);
       });
   };
-  console.log(counryInfo);
+  // console.log(counryInfo);
   return (
     <div className="app">
       <div className="app__left">
@@ -105,8 +111,10 @@ function App() {
         <CardContent>
           {/* Table */}
           <h3>Live Cases by Country</h3>
+          <Table countries = {tableData} />
           {/* Chart */}
           <h3>Worlwide New Cases</h3>
+          <LineGraph casesType = "cases"/>
         </CardContent>
       </Card>
     </div>
