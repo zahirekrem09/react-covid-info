@@ -12,12 +12,17 @@ import LineGraph from "./LineGraph";
 import Map from "./Map";
 import Table from "./Table";
 import { sortData } from "./util";
+import "leaflet/dist/leaflet.css";
 
 function App() {
   const [countries, setCountries] = useState([]); // React hooks
   const [country, setCountry] = useState("worldwide");
   const [counryInfo, setCounryInfo] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
+  const [mapZoom, setMapZoom] = useState(3);
+  const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
 
   useEffect(() => {
     // api endpoint :"https://disease.sh/v3/covid-19/countries"
@@ -31,7 +36,8 @@ function App() {
             value: country.countryInfo.iso2, //uk,tr
           }));
           const sortedData = sortData(data)
-          setTableData(sortedData)
+          setTableData(sortedData);
+          setMapCountries(data);
           setCountries(countries);
         });
     };
@@ -59,6 +65,9 @@ function App() {
       .then((data) => {
         setCountry(countryCode);
         setCounryInfo(data);
+
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapZoom(4);
       });
   };
   // console.log(counryInfo);
@@ -86,18 +95,21 @@ function App() {
         <div className="app__stats">
           {/* Infoboxs title = "Coronavirus cases" */}
           <InfoBox
+          onClick={(e) => setCasesType("cases")}
             title="Coronavirus Cases"
             cases={counryInfo.todayCases}
             total={counryInfo.cases}
           />
           {/* Infoboxs title = "Coronavirus recoveries"*/}
           <InfoBox
+          onClick={(e) => setCasesType("recovered")}
             title="Recovered"
             cases={counryInfo.todayRecovered}
             total={counryInfo.recovered}
           />
           {/* Infoboxs title = "Coronavirus cases"*/}
           <InfoBox
+          onClick={(e) => setCasesType("deaths")}
             title="Deaths"
             cases={counryInfo.todayDeaths}
             total={counryInfo.deaths}
@@ -105,7 +117,7 @@ function App() {
         </div>
 
         {/* Map */}
-        <Map />
+        <Map center = {mapCenter} zoom = {mapZoom} countries = {mapCountries} casesType={casesType} />
       </div>
       <Card className="app_right">
         <CardContent>
