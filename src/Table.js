@@ -1,5 +1,6 @@
 import React from 'react'
 import "./Table.css";
+import { prettyPrintStat } from "./util";
 const Table = ({countries}) => {
     return (
         <div className="table">
@@ -7,7 +8,7 @@ const Table = ({countries}) => {
               countries.map(({country,cases})=> (
                   <tr>
                       <td>{country}</td>
-                      <td><strong>{cases}</strong></td>
+                      <td><strong>{prettyPrintStat(cases)}</strong></td>
                           
                       
                   </tr>         

@@ -42,9 +42,10 @@ export const showDataOnMap = (data, casesType = "cases") =>
       center={[country.countryInfo.lat, country.countryInfo.long]}
       color={casesTypeColors[casesType].hex}
       fillColor={casesTypeColors[casesType].hex}
-      fillOpacity={0.4}
+      fillOpacity={0.5}
       radius={
         Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier
+        // cirle draw
       }
     >
       <Popup>
@@ -55,13 +56,13 @@ export const showDataOnMap = (data, casesType = "cases") =>
           ></div>
           <div className="info-name">{country.country}</div>
           <div className="info-confirmed">
-            Cases: {numeral(country.cases).format("0,0")}
+            Cases: {prettyPrintStat(country.cases)}
           </div>
           <div className="info-recovered">
-            Recovered: {numeral(country.recovered).format("0,0")}
+            Recovered: {prettyPrintStat(country.recovered)}
           </div>
           <div className="info-deaths">
-            Deaths: {numeral(country.deaths).format("0,0")}
+            Deaths: {prettyPrintStat(country.deaths)}
           </div>
         </div>
       </Popup>

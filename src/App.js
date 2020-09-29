@@ -4,6 +4,7 @@ import {
   FormControl,
   MenuItem,
   Select,
+  Grid,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import "./App.css";
@@ -11,7 +12,7 @@ import InfoBox from "./InfoBox";
 import LineGraph from "./LineGraph";
 import Map from "./Map";
 import Table from "./Table";
-import { sortData } from "./util";
+import { prettyPrintStat, sortData } from "./util";
 import "leaflet/dist/leaflet.css";
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
             name: country.country, //unidede kin, turkey
             value: country.countryInfo.iso2, //uk,tr
           }));
-          const sortedData = sortData(data)
+          const sortedData = sortData(data);
           setTableData(sortedData);
           setMapCountries(data);
           setCountries(countries);
@@ -73,11 +74,19 @@ function App() {
   // console.log(counryInfo);
   return (
     <div className="app">
+
+
       <div className="app__left">
         {/* Header */}
         {/* Title and input dropdown */}
+        <Card className="app__headerCard" >
+        <CardContent>
         <div className="app__header">
+          <div className="app__logo">
+            <img className="app__logoImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSyk2l9wbIt0m3AVcAq5oktv1pWEASR9Fa5DA&usqp=CAU" alt=""/>
           <h1>Covid-19 Info</h1>
+          </div>
+        
           <FormControl className="app__dropdown">
             <Select
               variant="outlined"
@@ -91,42 +100,59 @@ function App() {
             </Select>
           </FormControl>
         </div>
+        </CardContent>
+      </Card>
+       
 
-        <div className="app__stats">
-          {/* Infoboxs title = "Coronavirus cases" */}
-          <InfoBox
-          onClick={(e) => setCasesType("cases")}
-            title="Coronavirus Cases"
-            cases={counryInfo.todayCases}
-            total={counryInfo.cases}
-          />
-          {/* Infoboxs title = "Coronavirus recoveries"*/}
-          <InfoBox
-          onClick={(e) => setCasesType("recovered")}
-            title="Recovered"
-            cases={counryInfo.todayRecovered}
-            total={counryInfo.recovered}
-          />
-          {/* Infoboxs title = "Coronavirus cases"*/}
-          <InfoBox
-          onClick={(e) => setCasesType("deaths")}
-            title="Deaths"
-            cases={counryInfo.todayDeaths}
-            total={counryInfo.deaths}
-          />
-        </div>
-
+        <Grid container className="" spacing={3}>
+          <Grid item xs={4}>
+            <InfoBox
+              isRed
+              active={casesType === "cases"}
+              onClick={(e) => setCasesType("cases")}
+              title="Coronavirus Cases"
+              cases={prettyPrintStat(counryInfo.todayCases)}
+              total={prettyPrintStat(counryInfo.cases)}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <InfoBox
+              active={casesType === "recovered"}
+              onClick={(e) => setCasesType("recovered")}
+              title="Recovered"
+              cases={prettyPrintStat(counryInfo.todayRecovered)}
+              total={prettyPrintStat(counryInfo.recovered)}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <InfoBox
+              isRed
+              active={casesType === "deaths"}
+              onClick={(e) => setCasesType("deaths")}
+              title="Deaths"
+              cases={prettyPrintStat(counryInfo.todayDeaths)}
+              total={prettyPrintStat(counryInfo.deaths)}
+            />
+          </Grid>
+        </Grid>
         {/* Map */}
-        <Map center = {mapCenter} zoom = {mapZoom} countries = {mapCountries} casesType={casesType} />
+        <Map
+          center={mapCenter}
+          zoom={mapZoom}
+          countries={mapCountries}
+          casesType={casesType}
+        />
       </div>
-      <Card className="app_right">
+      <Card className="app__right">
         <CardContent>
           {/* Table */}
           <h3>Live Cases by Country</h3>
-          <Table countries = {tableData} />
+          <Table countries={tableData} />
           {/* Chart */}
-          <h3>Worlwide New Cases</h3>
-          <LineGraph casesType = "cases"/>
+          <br />
+          <h3>Worlwide New {casesType}</h3>
+          <br />
+          <LineGraph className="app__graph" casesType={casesType} />
         </CardContent>
       </Card>
     </div>
