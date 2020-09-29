@@ -64,6 +64,9 @@ body {
   .app {
     flex-direction: column;
   }
+  .app__right {
+    margin-top: 1rem;
+  }
 }
 
 .paper {
