@@ -105,7 +105,7 @@ function App() {
        
 
         <Grid container className="" spacing={3}>
-          <Grid item xs={4}>
+          <Grid item xs={12}  sm = {4}>
             <InfoBox
               isRed
               active={casesType === "cases"}
@@ -115,7 +115,7 @@ function App() {
               total={prettyPrintStat(counryInfo.cases)}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}  sm = {4}>
             <InfoBox
               active={casesType === "recovered"}
               onClick={(e) => setCasesType("recovered")}
@@ -124,7 +124,7 @@ function App() {
               total={prettyPrintStat(counryInfo.recovered)}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}  sm = {4}>
             <InfoBox
               isRed
               active={casesType === "deaths"}
