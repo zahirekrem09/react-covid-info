@@ -68,6 +68,15 @@ body {
     margin-top: 1rem;
   }
 }
+@media (max-width: 650px) {
+  .app__header {
+    display: flex;
+    flex-direction: column;
+  }
+  .app__logo > h1 {
+    font-size: 1.5rem;
+  }
+}
 
 .paper {
   height: 140px;
